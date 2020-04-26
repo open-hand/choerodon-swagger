@@ -31,10 +31,7 @@ build:
       - tsconfig.json
       - .gitignore
       - .github/**/*
-      - .gitlab-ci.yml
       - "*.md"
-    variables:
-      - $CI_COMMIT_MESSAGE =~ /combine/
 
 tag:
   stage: build
@@ -71,7 +68,6 @@ release:
       - tsconfig.json
       - .gitignore
       - .github/**/*
-      - .gitlab-ci.yml
       - "*.md"
 
 tag release:
