@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: registry.choerodon.com.cn/hzero-hzero/hzero-swagger
+  repository: registry.choerodon.com.cn/hzero-c7ncd/hzero-swagger
   pullPolicy: Always
 
 preJob:
@@ -32,7 +32,7 @@ env:
     # 配置中心地址
     SPRING_CLOUD_CONFIG_URI: http://dev.hzero.org:8010/
     # 数据库地址
-    SPRING_DATASOURCE_URL: jdbc:mysql://db.hzero.org:3306/hzero_governance?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    SPRING_DATASOURCE_URL: jdbc:mysql://db.hzero.org:3306/hzero_admin?useUnicode=true&characterEncoding=utf-8&useSSL=false
     # 数据库用户名
     SPRING_DATASOURCE_USERNAME: hzero
     # 数据库密码
