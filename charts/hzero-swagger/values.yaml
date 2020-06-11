@@ -62,6 +62,7 @@ env:
     HYSTRIX_COMMAND_TIMEOUT_IN_MILLISECONDS: 40000
     # Swagger Client ID
     HZERO_SWAGGER_CLIENT: client
+
     # Oauth地址
     HZERO_OAUTH_URL: http://dev.hzero.org/oauth/oauth/authorize
     # Swagger忽略服务
