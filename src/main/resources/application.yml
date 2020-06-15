@@ -57,7 +57,9 @@ hzero:
     enable-https: ${HZERO_SWAGGER_ENABLE_HTTPS:false}
     fetch-time: ${HZERO_SWAGGER_FETCH_TIME:20}
     fetch-seconds: ${HZERO_SWAGGER_FETCH_SECONDS:30}
-
+  data:
+    permission:
+      enabled: ${HZERO_DATA_PERMISSION_ENABLED: false} # 启用(默认开启)
 logging:
   level:
     org.hzero.mybatis: ${LOG_LEVEL:info}
