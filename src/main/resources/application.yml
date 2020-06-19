@@ -2,7 +2,7 @@ spring:
   application:
     name: hzero-swagger
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://db.hzero.org:3306/hzero_admin?useUnicode=true&characterEncoding=utf-8&useSSL=false}
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://172.23.16.45:3306/hzero_admin?useUnicode=true&characterEncoding=utf-8&useSSL=false}
     username: ${SPRING_DATASOURCE_USERNAME:hzero}
     password: ${SPRING_DATASOURCE_PASSWORD:hzero}
     hikari:
@@ -57,10 +57,10 @@ hzero:
     enable-https: ${HZERO_SWAGGER_ENABLE_HTTPS:false}
     fetch-time: ${HZERO_SWAGGER_FETCH_TIME:20}
     fetch-seconds: ${HZERO_SWAGGER_FETCH_SECONDS:30}
-
 logging:
   level:
-    org.hzero.mybatis: ${LOG_LEVEL:info}
+    org.hzero: ${LOG_LEVEL:info}
+    io.choerodon: ${LOG_LEVEL:info}
     org.springframework.web: ${LOG_LEVEL:info}
   path: ./logs
 

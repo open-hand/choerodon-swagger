@@ -8,15 +8,6 @@ image:
   repository: registry.choerodon.com.cn/hzero-c7ncd/hzero-swagger
   pullPolicy: Always
 
-preJob:
-  image: registry.cn-hangzhou.aliyuncs.com/choerodon-tools/dbtool:0.6.2
-  timeout: 1200
-  preInitDB:
-    enable: false
-    datasource:
-      url: jdbc:mysql://db.hzero.org:3306/hzero_admin?useUnicode=true&characterEncoding=utf-8&useSSL=false
-      username: hzero
-      password: hzero
 
 deployment:
   managementPort: 8051
@@ -62,6 +53,7 @@ env:
     HYSTRIX_COMMAND_TIMEOUT_IN_MILLISECONDS: 40000
     # Swagger Client ID
     HZERO_SWAGGER_CLIENT: client
+
     # Oauth地址
     HZERO_OAUTH_URL: http://dev.hzero.org/oauth/oauth/authorize
     # Swagger忽略服务
