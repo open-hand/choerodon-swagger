@@ -1,11 +1,11 @@
-# Default values for hzero-swagger.
+# Default values for choerodon-swagger.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
 replicaCount: 1
 
 image:
-  repository: registry.choerodon.com.cn/hzero-c7ncd/hzero-swagger
+  repository: registry.choerodon.com.cn/hzero-c7ncd/choerodon-swagger
   pullPolicy: Always
 
 
@@ -94,7 +94,7 @@ service:
   enabled: false
   type: ClusterIP
   port: 8050
-  name: hzero-swagger
+  name: choerodon-swagger
   
 ingress:
   enabled: false
