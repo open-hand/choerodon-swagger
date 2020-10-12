@@ -8,9 +8,9 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>hzero-swagger</artifactId>
-    <version>0.24.0-alpha.1.RELEASE</version>
-    <name>hzero-swagger</name>
+    <artifactId>choerodon-swagger</artifactId>
+    <version>0.24.0-SNAPSHOT</version>
+    <name>choerodon-swagger</name>
 
     <dependencies>
         <!-- 数据库驱动 -->

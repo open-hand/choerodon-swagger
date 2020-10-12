@@ -1,6 +1,6 @@
 spring:
   application:
-    name: hzero-swagger
+    name: choerodon-swagger
   datasource:
     url: ${SPRING_DATASOURCE_URL:jdbc:mysql://172.23.16.45:3306/hzero_admin?useUnicode=true&characterEncoding=utf-8&useSSL=false}
     username: ${SPRING_DATASOURCE_USERNAME:hzero}
@@ -51,6 +51,25 @@ mybatis:
     mapUnderscoreToCamelCase: true
 
 hzero:
+  service:
+    platform:
+      name: choerodon-platform
+    oauth:
+      name: choerodon-oauth
+    iam:
+      name: choerodon-iam
+    file:
+      name: choerodon-file
+    message:
+      name: choerodon-message
+    admin:
+      name: choerodon-admin
+    swagger:
+      name: choerodon-swagger
+    gateway:
+      name: choerodon-gateway
+    monitor:
+      name: choerodon-monitor
   swagger:
     client: ${HZERO_SWAGGER_CLIENT:client}
     skip-service: ${HZERO_SWAGGER_SKIP_SERVICE:register, gateway, oauth}
