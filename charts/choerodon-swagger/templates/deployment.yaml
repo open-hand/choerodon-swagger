@@ -23,6 +23,8 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Chart.Version }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
+          - name: "CHART_VERSION"
+            value: { { .Chart.Version} }
 {{- range $name, $value := .Values.env.open }}
 {{- if not (empty $value) }}
           - name: {{ $name | quote }}
