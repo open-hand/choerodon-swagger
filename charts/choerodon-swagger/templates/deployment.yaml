@@ -24,7 +24,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
           - name: "CHART_VERSION"
-            value: { { .Chart.Version} }
+            value: {{ .Chart.Version}}
 {{- range $name, $value := .Values.env.open }}
 {{- if not (empty $value) }}
           - name: {{ $name | quote }}
