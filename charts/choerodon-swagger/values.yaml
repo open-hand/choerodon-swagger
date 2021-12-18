@@ -49,8 +49,10 @@ env:
     # 当资源池连接用尽后，调用者的最大等待时间(单位为毫秒)
     # 默认 -1 表示永不超时，设置5秒
     SPRING_REDIS_POOL_MAX_WAIT: 5000
-    # Hystrix 熔断超时时间
-    HYSTRIX_COMMAND_TIMEOUT_IN_MILLISECONDS: 40000
+    # 连接超时
+    FEIGN_CLIENT_CONFIG_DEFAULT_CONNECT_TIMEOUT: 2000
+    # 读取超时
+    FEIGN_CLIENT_CONFIG_DEFAULT_READ_TIMEOUT: 5000
     # Swagger Client ID
     HZERO_SWAGGER_CLIENT: client
 
