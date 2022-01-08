@@ -9,7 +9,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>choerodon-swagger</artifactId>
-    <version>1.2.0-alpha.2-SNAPSHOT</version>
+    <version>1.2.0-alpha.2.RELEASE</version>
     <name>choerodon-swagger</name>
 
     <dependencies>
