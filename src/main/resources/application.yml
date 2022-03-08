@@ -96,6 +96,7 @@ hzero:
     enable-https: ${HZERO_SWAGGER_ENABLE_HTTPS:false}
     fetch-time: ${HZERO_SWAGGER_FETCH_TIME:20}
     fetch-seconds: ${HZERO_SWAGGER_FETCH_SECONDS:30}
+    base-url: ${HZERO_SWAGGER_BASE_URL:}
 
 logging:
   level:
