@@ -68,6 +68,8 @@ env:
     HZERO_SWAGGER_FETCH_TIME: 20
     # Swagger获取文档时间（秒）
     HZERO_SWAGGER_FETCH_SECONDS: 30
+    # swagger地址
+    HZERO_SWAGGER_BASE_URL: http://api.example.com/swagger
     # 日志级别
     LOG_LEVEL: info
     JAVA_OPTS: >
