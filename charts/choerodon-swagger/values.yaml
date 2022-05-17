@@ -1,116 +1,606 @@
-# Default values for choerodon-swagger.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry and imagePullSecrets
+##
+global:
+  # -- Global Docker image registry
+  imageRegistry:
+  # -- Global Docker registry secret names as an array
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+  # -- Global StorageClass for Persistent Volume(s)
+  storageClass:
 
+# -- String to partially override common.names.fullname template (will maintain the release name)
+##
+nameOverride:
+
+# -- String to fully override common.names.fullname template
+##
+fullnameOverride:
+
+# -- Force target Kubernetes version (using Helm capabilites if not set)
+##
+kubeVersion:
+
+## service image version
+## ref: https://github.com/open-hand/server
+##
+image:
+  # -- service image registry
+  registry: registry.cn-shanghai.aliyuncs.com
+  # -- service image repository
+  repository: c7n/choerodon-swagger
+  # -- (string) service image tag. Default Chart.AppVersion
+  tag: ~
+  # -- Specify a imagePullPolicy.
+  # Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent
+  # -- Optionally specify an array of imagePullSecrets.
+  # Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
+
+## Service operating environment
+##
+base:
+  # -- Java base image registry
+  registry: registry.cn-shanghai.aliyuncs.com
+  # -- Java base image repository
+  repository: c7n/javabase
+  # -- Java base image tag
+  tag: jdk8u282-b08
+  # -- Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent
+  # -- Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
+
+# -- Add labels to all the deployed resources
+##
+commonLabels: {}
+
+# -- Add annotations to all the deployed resources
+##
+commonAnnotations: {}
+
+## An array to add extra env vars
+## e.g:
+## extraEnv:
+##   FOO: "bar"
+##
+extraEnv: 
+  # Eureka 注册中心地址
+  EUREKA_DEFAULT_ZONE: http://dev.hzero.org:8000/eureka/
+  # 服务以IP地址注册
+  EUREKA_INSTANCE_PREFER_IP_ADDRESS: true
+  # 是否启用配置中心
+  SPRING_CLOUD_CONFIG_ENABLED: false
+  # 配置中心地址
+  SPRING_CLOUD_CONFIG_URI: http://dev.hzero.org:8010/
+  # 数据库地址
+  SPRING_DATASOURCE_URL: jdbc:mysql://db.hzero.org:3306/hzero_admin?useUnicode=true&characterEncoding=utf-8&useSSL=false
+  # 数据库用户名
+  SPRING_DATASOURCE_USERNAME: hzero
+  # 数据库密码
+  SPRING_DATASOURCE_PASSWORD: hzero
+  # 连接池最小空闲连接数
+  SPRING_DATASOURCE_MINIMUM_IDLE: 20
+  # 连接池允许的最大连接数
+  SPRING_DATASOURCE_MAXIMUM_POOL_SIZE: 200
+  # 等待连接池分配连接的最大时长（毫秒）
+  SPRING_DATASOURCE_CONNECTION_TIMEOUT: 30000
+  # Redis地址
+  SPRING_REDIS_HOST: redis.hzero.org
+  # Redis端口
+  SPRING_REDIS_PORT: 6379
+  # Redis数据库
+  SPRING_REDIS_DATABASE: 1
+  # 资源池中最大连接数
+  # 默认8，-1表示无限制；可根据服务并发redis情况及服务端的支持上限调整
+  SPRING_REDIS_POOL_MAX_ACTIVE: 50
+  # 资源池运行最大空闲的连接数
+  # 默认8，-1表示无限制；可根据服务并发redis情况及服务端的支持上限调整，一般建议和max-active保持一致，避免资源伸缩带来的开销
+  SPRING_REDIS_POOL_MAX_IDLE: 50
+  # 当资源池连接用尽后，调用者的最大等待时间(单位为毫秒)
+  # 默认 -1 表示永不超时，设置5秒
+  SPRING_REDIS_POOL_MAX_WAIT: 5000
+  # 连接超时
+  FEIGN_CLIENT_CONFIG_DEFAULT_CONNECT_TIMEOUT: 2000
+  # 读取超时
+  FEIGN_CLIENT_CONFIG_DEFAULT_READ_TIMEOUT: 5000
+  # Swagger Client ID
+  HZERO_SWAGGER_CLIENT: client
+
+  # Oauth地址
+  HZERO_OAUTH_URL: http://dev.hzero.org/oauth/oauth/authorize
+  # Swagger忽略服务
+  HZERO_SWAGGER_SKIP_SERVICE: register, gateway, oauth
+  # 网关域
+  HZERO_GATEWAY_DOMAIN: dev.hzero.org:8080
+  # Swagger支持协议
+  HZERO_SWAGGER_PROTOCOLS: http
+  # Swagger获取文档次数
+  HZERO_SWAGGER_FETCH_TIME: 20
+  # Swagger获取文档时间（秒）
+  HZERO_SWAGGER_FETCH_SECONDS: 30
+  # swagger地址
+  HZERO_SWAGGER_BASE_URL: http://api.example.com/swagger
+  # 日志级别
+  LOG_LEVEL: info
+  # JAVA_OPTS: >-
+  #   -Xms1024m
+  #   -Xmx1536m
+
+# -- ConfigMap with extra environment variables
+##
+extraEnvVarsCM: ""
+
+# -- Secret with extra environment variables
+##
+extraEnvVarsSecret: ""
+
+# -- Container's working directory(Default mountPath).
+##
+workingDir: /opt/choerodon
+
+# -- Command for running the server container (set to default if not set). Use array form
+##
+command: []
+
+# -- Args for running the server container (set to default if not set). Use array form
+##
+args: []
+
+# -- Scheduler name
+## https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+##
+schedulerName: 
+
+# -- EnableServiceLinks indicates whether information about services should be injected into pod's environment variables, 
+# matching the syntax of Docker links. Optional: Defaults to false.
+## 
+enableServiceLinks: false
+
+# -- AutomountServiceAccountToken indicates whether a service account token should be automatically mounted.
+## 
+automountServiceAccountToken: false
+
+## server deployment parameters
+## The deployment strategy to use to replace existing pods with new ones.
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+## e.g:
+## updateStrategy:
+##  type: Recreate
+##
+updateStrategy:
+  # -- Type of deployment. Can be "Recreate" or "RollingUpdate". Default is RollingUpdate.
+  type: RollingUpdate
+  # -- Rolling update config params. Present only if DeploymentStrategyType = RollingUpdate.
+  rollingUpdate:
+    maxSurge: 100%
+    maxUnavailable: 0
+
+# -- Number of deployment replicas
+##
 replicaCount: 1
 
-image:
-  repository: registry.choerodon.com.cn/hzero-c7ncd/choerodon-swagger
-  pullPolicy: Always
+# -- server pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
 
+## server container ports to open
+##
+containerPort: 
+  # -- server port
+  serverPort: 8050
+  # -- server management port
+  actuatorPort: 8051
 
-deployment:
-  managementPort: 8051
+# -- Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+##
+securityContext:
+  enabled: true
+  fsGroup: 33
+  runAsUser: 33
 
-env:
-  open:
-    # Eureka 注册中心地址
-    EUREKA_DEFAULT_ZONE: http://dev.hzero.org:8000/eureka/
-    # 服务以IP地址注册
-    EUREKA_INSTANCE_PREFER_IP_ADDRESS: true
-    # 是否启用配置中心
-    SPRING_CLOUD_CONFIG_ENABLED: false
-    # 配置中心地址
-    SPRING_CLOUD_CONFIG_URI: http://dev.hzero.org:8010/
-    # 数据库地址
-    SPRING_DATASOURCE_URL: jdbc:mysql://db.hzero.org:3306/hzero_admin?useUnicode=true&characterEncoding=utf-8&useSSL=false
-    # 数据库用户名
-    SPRING_DATASOURCE_USERNAME: hzero
-    # 数据库密码
-    SPRING_DATASOURCE_PASSWORD: hzero
-    # 连接池最小空闲连接数
-    SPRING_DATASOURCE_MINIMUM_IDLE: 20
-    # 连接池允许的最大连接数
-    SPRING_DATASOURCE_MAXIMUM_POOL_SIZE: 200
-    # 等待连接池分配连接的最大时长（毫秒）
-    SPRING_DATASOURCE_CONNECTION_TIMEOUT: 30000
-    # Redis地址
-    SPRING_REDIS_HOST: redis.hzero.org
-    # Redis端口
-    SPRING_REDIS_PORT: 6379
-    # Redis数据库
-    SPRING_REDIS_DATABASE: 1
-    # 资源池中最大连接数
-    # 默认8，-1表示无限制；可根据服务并发redis情况及服务端的支持上限调整
-    SPRING_REDIS_POOL_MAX_ACTIVE: 50
-    # 资源池运行最大空闲的连接数
-    # 默认8，-1表示无限制；可根据服务并发redis情况及服务端的支持上限调整，一般建议和max-active保持一致，避免资源伸缩带来的开销
-    SPRING_REDIS_POOL_MAX_IDLE: 50
-    # 当资源池连接用尽后，调用者的最大等待时间(单位为毫秒)
-    # 默认 -1 表示永不超时，设置5秒
-    SPRING_REDIS_POOL_MAX_WAIT: 5000
-    # 连接超时
-    FEIGN_CLIENT_CONFIG_DEFAULT_CONNECT_TIMEOUT: 2000
-    # 读取超时
-    FEIGN_CLIENT_CONFIG_DEFAULT_READ_TIMEOUT: 5000
-    # Swagger Client ID
-    HZERO_SWAGGER_CLIENT: client
+# -- Pod labels
+## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+podLabels: {}
 
-    # Oauth地址
-    HZERO_OAUTH_URL: http://dev.hzero.org/oauth/oauth/authorize
-    # Swagger忽略服务
-    HZERO_SWAGGER_SKIP_SERVICE: register, gateway, oauth
-    # 网关域
-    HZERO_GATEWAY_DOMAIN: dev.hzero.org:8080
-    # Swagger支持协议
-    HZERO_SWAGGER_PROTOCOLS: http
-    # Swagger获取文档次数
-    HZERO_SWAGGER_FETCH_TIME: 20
-    # Swagger获取文档时间（秒）
-    HZERO_SWAGGER_FETCH_SECONDS: 30
-    # swagger地址
-    HZERO_SWAGGER_BASE_URL: http://api.example.com/swagger
-    # 日志级别
-    LOG_LEVEL: info
-    JAVA_OPTS: >
-      -Xms1024m
-      -Xmx1536m
+# -- Pod annotations
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+##
+podAnnotations: {}
 
-    ## Skywalking 配置参数
-    # SKYWALKING_OPTS: >-
-    #   -javaagent:/agent/skywalking-agent.jar
-    #   -Dskywalking.agent.application_code=asgard-service
-    #   -Dskywalking.agent.sample_n_per_3_secs=-1
-    #   -Dskywalking.collector.backend_service=oap.skywalking:11800
+# -- Pod affinity preset.
+# Allowed values: soft, hard
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+##
+podAffinityPreset: ""
 
+# -- Pod anti-affinity preset.
+# Allowed values: soft, hard
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+##
+podAntiAffinityPreset: soft
 
-metrics:
-  path: /actuator/prometheus
-  group: spring-boot
+## Node affinity preset.
+## Allowed values: soft, hard
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+##
+nodeAffinityPreset:
+  # -- Node affinity type.
+  # Allowed values: soft, hard
+  ##
+  type: ""
+  # -- Node label key to match
+  ## E.g.
+  ## key: "kubernetes.io/e2e-az-name"
+  ##
+  key: ""
+  # -- Node label values to match
+  ## E.g.
+  ## values:
+  ##   - e2e-az1
+  ##   - e2e-az2
+  ##
+  values: []
 
-logs:
-  parser: spring-boot
+# -- Affinity for pod assignment. Evaluated as a template.
+# Note: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set
+## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+##
+affinity: {}
 
-persistence:
-  enabled: false
+# -- Node labels for pod assignment. Evaluated as a template.
+## ref: https://kubernetes.io/docs/user-guide/node-selection/
+##
+nodeSelector: {}
 
-service:
-  enabled: false
-  type: ClusterIP
-  port: 8050
-  name: choerodon-swagger
-  
-ingress:
-  enabled: false
+# -- Tolerations for pod assignment. Evaluated as a template.
+## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+##
+tolerations: []
 
+## server containers' resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+##
 resources:
-  limits:
-    memory: 1.7Gi
-  requests:
-    memory: 1.2Gi
-hzero:
-  HZERO_NODE_GROUP_ID: 0
-  HZERO_PRODUCT_CODE: DEFAULT
-  HZERO_PRODUCT_VERSION_CODE: DEFAULT
-  HZERO_PRODUCT_ENV_CODE: DEFAULT
-  HZERO_SERVICE_VERSION_CODE: DEFAULT
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+
+  # -- The resources limits for the init container
+  limits: 
+    # cpu: 2
+    memory: 2Gi
+
+  # -- The requested resources for the init container
+  requests: 
+    # cpu: 500m
+    memory: 2Gi
+
+## Configure extra options for liveness, readiness and startup probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+##
+livenessProbe:
+  # -- Enable livenessProbe
+  enabled: true
+  # -- Initial delay seconds for livenessProbe
+  initialDelaySeconds: 480
+  # -- Period seconds for livenessProbe
+  periodSeconds: 5
+  # -- Timeout seconds for livenessProbe
+  timeoutSeconds: 3
+  # -- Success threshold for livenessProbe
+  successThreshold: 1
+  # -- Failure threshold for livenessProbe
+  failureThreshold: 5
+readinessProbe:
+  # -- Enable readinessProbe
+  enabled: true
+  # -- Initial delay seconds for readinessProbe
+  initialDelaySeconds: 30
+  # -- Period seconds for readinessProbe
+  periodSeconds: 5
+  # -- Timeout seconds for readinessProbe
+  timeoutSeconds: 3
+  # -- Success threshold for readinessProbe
+  successThreshold: 1
+  # -- Failure threshold for readinessProbe
+  failureThreshold: 5
+startupProbe:
+  # -- Enable startupProbe
+  enabled: false
+  # -- Initial delay seconds for startupProbe
+  initialDelaySeconds: 0
+  # -- Period seconds for startupProbe
+  periodSeconds: 5
+  # -- Timeout seconds for startupProbe
+  timeoutSeconds: 3
+  # -- Success threshold for startupProbe
+  successThreshold: 1
+  # -- Failure threshold for startupProbe
+  failureThreshold: 60
+
+## Custom Liveness, Readiness, and Startup probes for server
+##
+# customLivenessProbe -- Custom Liveness
+customLivenessProbe: {}
+# -- Custom Readiness
+customReadinessProbe: {}
+# -- Custom Startup probes
+customStartupProbe: {}
+
+# -- Extra volumes to add to the server statefulset
+##
+extraVolumes: []
+
+# -- Extra volume mounts to add to server containers
+##
+extraVolumeMounts: []
+
+# -- Add init containers to the server pods.
+## e.g:
+## initContainers:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+initContainers: {}
+
+## Skywalking options
+skywalking:
+  # -- Enable skywalking
+  enabled: false
+  # -- Skywalking image registry
+  registry: registry.cn-shanghai.aliyuncs.com
+  # -- Skywalking image repository
+  repository: c7n/skywalking-agent
+  # -- Skywalking image tag
+  tag: 8.10.0
+  # -- Specify a imagePullPolicy
+  # Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent
+  # -- Optionally specify an array of imagePullSecrets.
+  # Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
+
+  ## Skywalking Agent Configuration
+  ## ref: https://github.com/apache/skywalking/blob/master/docs/en/setup/service-agent/java-agent/README.md#table-of-agent-configuration-properties
+
+  # skywalking.serviceName -- The serviceName (Default .Chart.Name) to represent a logic group providing the same capabilities/logic. 
+  # Suggestion: set a unique name for every logic service group, service instance nodes share the same code,Max length is 50(UTF-8 char).
+  serviceName: 
+
+  # -- Negative or zero means off, by default. sampleNPer3Secs means sampling N TraceSegment in 3 seconds tops.
+  sampleNPer3Secs: 9
+
+  # -- Collector SkyWalking trace receiver service addresses.
+  collectorService: oap.skywalking:11800
+
+  # -- String to fully override Skywalking Agent Configuration template
+  commandOverride: 
+
+# -- Add sidecars to the server pods.
+## e.g:
+## sidecars:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+sidecars: {}
+
+## server Service properties
+##
+service:
+  # -- Set to true to enable service record generation
+  ##
+  enabled: true
+  # -- server Service type
+  ##
+  type: ClusterIP
+  # -- server Service port
+  ##
+  port: 
+    server: 8050
+    actuator: 8051
+  # -- Specify the nodePort value for the LoadBalancer and NodePort service types.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+  ##
+  nodePort:
+    server: 30178
+    actuator: 30179
+  # -- loadBalancerIP for the server Service (optional, cloud specific)
+  ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+  ##
+  loadBalancerIP:
+  # -- Load Balancer sources
+  ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+  ## e.g:
+  ## loadBalancerSourceRanges:
+  ##   - 10.10.10.0/24
+  ##
+  loadBalancerSourceRanges: []
+  # -- Enable client source IP preservation
+  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ##
+  externalTrafficPolicy: Cluster
+  # -- Provide any additional annotations which may be required. This can be used to
+  # set the LoadBalancer service type to internal only.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+  ##
+  annotations: {}
+
+## Discourse ingress parameters
+## ref: https://kubernetes.io/docs/user-guide/ingress/
+##
+ingress:
+  # -- Enable ingress record generation for Discourse
+  ##
+  enabled: false
+  # -- IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+  ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+  ##
+  ingressClassName: ""
+  # -- Ingress path type
+  ##
+  pathType: ImplementationSpecific
+  # -- Force Ingress API version (automatically detected if not set)
+  ##
+  apiVersion: ""
+  # -- Default host for the ingress record
+  ##
+  hostname: server.local
+  # -- Default path for the ingress record
+  ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
+  ##
+  path: /
+  # -- Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
+  ## Use this parameter to set the required annotations for cert-manager, see
+  ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+  ## e.g:
+  ## annotations:
+  ##   kubernetes.io/ingress.class: nginx
+  ##   cert-manager.io/cluster-issuer: cluster-issuer-name
+  ##
+  annotations: {}
+  # -- Enable TLS configuration for the host defined at `ingress.hostname` parameter
+  ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
+  ## You can:
+  ##   - Use the `ingress.secrets` parameter to create this TLS secret
+  ##   - Relay on cert-manager to create it by setting the corresponding annotations
+  ##   - Relay on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
+  ##
+  tls: false
+  # -- Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+  ##
+  selfSigned: false
+  # -- An array with additional hostname(s) to be covered with the ingress record
+  ## e.g:
+  ## extraHosts:
+  ##   - name: discourse.local
+  ##     path: /
+  ##
+  extraHosts: []
+  # -- An array with additional arbitrary paths that may need to be added to the ingress under the main host
+  ## e.g:
+  ## extraPaths:
+  ## - path: /*
+  ##   backend:
+  ##     serviceName: ssl-redirect
+  ##     servicePort: use-annotation
+  ##
+  extraPaths: []
+  # -- TLS configuration for additional hostname(s) to be covered with this ingress record
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ## e.g:
+  ## extraTls:
+  ## - hosts:
+  ##     - discourse.local
+  ##   secretName: discourse.local-tls
+  ##
+  extraTls: []
+  # -- Custom TLS certificates as secrets
+  ## NOTE: 'key' and 'certificate' are expected in PEM format
+  ## NOTE: 'name' should line up with a 'secretName' set further up
+  ## If it is not set and you're using cert-manager, this is unneeded, as it will create a secret for you with valid certificates
+  ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created valid for 365 days
+  ## It is also possible to create and manage the certificates outside of this helm chart
+  ## Please see README.md for more information
+  ## e.g:
+  ## secrets:
+  ##   - name: discourse.local-tls
+  ##     key: |-
+  ##       -----BEGIN RSA PRIVATE KEY-----
+  ##       ...
+  ##       -----END RSA PRIVATE KEY-----
+  ##     certificate: |-
+  ##       -----BEGIN CERTIFICATE-----
+  ##       ...
+  ##       -----END CERTIFICATE-----
+  ##
+  secrets: []
+
+## Enable persistence using Persistent Volume Claims
+## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+##
+persistence:
+  # -- If true, use a Persistent Volume Claim, If false, use emptyDir
+  ##
+  enabled: false
+  # -- Persistent Volume Storage Class
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
+  storageClass: 
+
+  # -- Data volume mount path
+  ##
+  mountPath: /data
+  # -- Persistent Volume Access Mode
+  ##
+  accessModes:
+    - ReadWriteOnce
+  # -- Persistent Volume size
+  ##
+  size: 8Gi
+  # -- Persistent Volume Claim annotations
+  ##
+  annotations: {}
+  # -- Enable persistence using an existing PVC
+  ##
+  existingClaim: 
+
+# -- Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
+volumePermissionsEnabled: false
+
+## Specifies whether a ServiceAccount should be created
+##
+serviceAccount:
+  # -- Set to true to create serviceAccount
+  ##
+  create: false
+  # -- The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the common.names.fullname template
+  ##
+  name: ""
