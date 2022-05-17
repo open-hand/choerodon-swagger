@@ -6,13 +6,13 @@ dependencies:
   - name: common
     repository: https://openchart.choerodon.com.cn/choerodon/c7n
     version: 1.x.x
-description: Gateway of Choerodon.
+description: Swagger of Choerodon.
 engine: gotpl
 home: https://github.com/open-hand/choerodon-swagger/tree/master/chart/choerodon-swagger
 icon: https://ui-avatars.com/api/?name=choerodon-swagger
 keywords:
   - choerodon
-  - gateway
+  - swagger
 maintainers:
   - email: zhuchiyu@vip.hand-china.com
     name: choerodon

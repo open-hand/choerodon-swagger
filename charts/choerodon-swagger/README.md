@@ -1,6 +1,6 @@
 # choerodon-swagger
 
-Gateway of Choerodon.
+Swagger of Choerodon.
 
 ## Installing the Chart
 
